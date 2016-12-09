@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "135815885489",
+    "firebase_url": "https://wifree-5486c.firebaseio.com",
+    "project_id": "wifree-5486c",
+    "storage_bucket": "wifree-5486c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135815885489:android:b1e4e4f01ea6a676",
+        "android_client_info": {
+          "package_name": "aitmobile.wifree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135815885489-mdq0ucabal899j8qr4r55qljl4t0i5ot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "aitmobile.wifree",
+            "certificate_hash": "4A87239E0D8F6578DF46CE7152175F29A7AD02A6"
+          }
+        },
+        {
+          "client_id": "135815885489-so3npiau9tsek4qgkg9eg3ui9jg3mq4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqJmOx850g0eeJMMEOJD0sbGcHGJxTbH8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135815885489-so3npiau9tsek4qgkg9eg3ui9jg3mq4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
