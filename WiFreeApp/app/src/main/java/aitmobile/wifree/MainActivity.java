@@ -1,7 +1,6 @@
 package aitmobile.wifree;
 
 import android.content.Context;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
@@ -12,11 +11,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.List;
+import aitmobile.wifree.data.Netw;
+import aitmobile.wifree.fragments.MessageFragment;
 
-import aitmobile.wifree.data.netw;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public static final String KEY_MSG = "KEY_MSG";
 
     private Button btnAdd;
     private LinearLayout linLayout;
@@ -32,29 +34,46 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNetwork();
+                addNetworkFragment();
             }
         });
     }
 
-    public void addNetwork(){
 
-        WifiManager wifiMan;
-        wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    private void addNetworkFragment() {
+        MessageFragment messageFragment = new MessageFragment();
+        messageFragment.setCancelable(false);
 
-        WifiInfo wifiInfo = wifiMan.getConnectionInfo();
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_MSG,getString(R.string.netw_add));
+        messageFragment.setArguments(bundle);
 
-        showToastMessage(wifiInfo.getSSID());
-
+        messageFragment.show(getSupportFragmentManager(),
+                "MessageFragment");
 
     }
 
+    public void addCurrNetwork(String passwd){
+        String SSID;
+        WifiManager wifiMan;
+        Netw ourNet;
+
+        wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+        WifiInfo wifiInfo = wifiMan.getConnectionInfo();
+        SSID = wifiInfo.getSSID();
+        ourNet = new Netw(SSID,passwd);
+
+        showToastMessage(ourNet.toString());
+    }
+
     private void showToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public void showSimpleSnackbarMessage(String message) {
 
         Snackbar.make(linLayout, message, Snackbar.LENGTH_LONG).show();
     }
+
 }
