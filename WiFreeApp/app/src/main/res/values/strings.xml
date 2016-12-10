@@ -8,4 +8,5 @@
     <string name="netw_added_suc">New network added</string>
     <string name="no_net_addd">Network not added</string>
     <string name="addnet">Add Network</string>
+    <string name="google_maps_key">AIzaSyCDznpCFbvJaqQ-6bc41G_slJROhYaoVVU</string>
 </resources>

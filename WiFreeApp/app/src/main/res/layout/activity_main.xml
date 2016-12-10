@@ -12,6 +12,13 @@
     tools:context="aitmobile.wifree.MainActivity">
 
 
+    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        tools:context="addison.WiFree.MainActivity" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewNewt"
