@@ -7,4 +7,5 @@
     <string name="net_title">Network Add</string>
     <string name="netw_added_suc">New network added</string>
     <string name="no_net_addd">Network not added</string>
+    <string name="addnet">Add Network</string>
 </resources>

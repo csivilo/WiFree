@@ -1,10 +1,14 @@
 package aitmobile.wifree.data;
 
+import com.orm.SugarRecord;
+
+import java.io.Serializable;
+
 /**
  * Created by C_lo on 12/9/2016.
  */
 
-public class Netw {
+public class Netw extends SugarRecord<Netw> implements Serializable{
     private String SSID;
     private String key;
 
