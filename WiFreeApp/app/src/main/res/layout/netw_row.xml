@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     android:padding="2dp"
+    android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,31 +15,20 @@
             android:textSize="20sp"
             android:layout_margin="10dp"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnAdd"
-            android:text="@string/addnet"
-            android:textSize="12sp"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
-            />
-
-
-    </LinearLayout>
-
-
-
-    <android.support.design.widget.FloatingActionButton
+    <ImageButton
         android:id="@+id/btnDelete"
+        android:src="@android:drawable/ic_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_delete"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="21dp"
-        android:layout_alignParentEnd="true" />
+        />
 
 
-</RelativeLayout>
+
+
+</LinearLayout>

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by C_lo on 12/9/2016.
  */
 
-public class Netw extends SugarRecord<Netw> implements Serializable{
+public class Netw extends SugarRecord implements Serializable{
     private String SSID;
     private String key;
 

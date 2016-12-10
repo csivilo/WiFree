@@ -3,7 +3,7 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="netpass">Network Password</string>
-    <string name="netw_add">Add a new network</string>
+    <string name="netw_add">Enter Network Password</string>
     <string name="net_title">Network Add</string>
     <string name="netw_added_suc">New network added</string>
     <string name="no_net_addd">Network not added</string>

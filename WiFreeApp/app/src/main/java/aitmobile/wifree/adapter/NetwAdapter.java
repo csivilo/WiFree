@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.orm.SugarDb;
+
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -28,16 +30,14 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public Button btnAdd;
         public TextView tvName;
 
-        public FloatingActionButton btnDelete;
+        public ImageButton btnDelete;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            btnDelete = (FloatingActionButton) itemView.findViewById(R.id.btnDelete);
-            btnAdd = (Button) itemView.findViewById(R.id.btnAdd);
+            btnDelete = (ImageButton) itemView.findViewById(R.id.btnDelete);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
 
         }
@@ -66,14 +66,6 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
                 removeNetw(position);
             }
         });
-
-        viewHolder.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) context).downloadNetw(netwList.get(position).getSSID(),
-                        netwList.get(position).getKey());
-            }
-        });
     }
 
     @Override
@@ -93,7 +85,7 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
         netwList.get(index).delete();
         // remove it from the list
         netwList.remove(index);
-        notifyDataSetChanged();
+        notifyItemRemoved(index);
     }
 
     public Netw getNetw(int i) {
