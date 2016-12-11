@@ -89,11 +89,13 @@ public class MainActivity extends AppCompatActivity {
         String SSID;
         Netw ourNet;
 
+
         this.wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         WifiInfo wifiInfo = this.wifiMan.getConnectionInfo();
         SSID = wifiInfo.getSSID();
         ourNet = new Netw(SSID,passwd);
+
 
         showToastMessage(ourNet.toString());
 

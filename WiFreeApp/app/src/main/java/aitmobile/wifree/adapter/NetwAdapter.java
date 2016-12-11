@@ -3,6 +3,7 @@ package aitmobile.wifree.adapter;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,11 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
     private Context context;
     private int lastPosition = -1;
 
+    public NetwAdapter(Context context) {
+        netwList = Netw.listAll(Netw.class);
+        this.context = context;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvName;
@@ -41,13 +47,6 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
             tvName = (TextView) itemView.findViewById(R.id.tvName);
 
         }
-    }
-
-
-
-    public NetwAdapter(Context context) {
-        netwList = Netw.listAll(Netw.class);
-        this.context = context;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
 
     public void addNetw(Netw netw) {
         netw.save();
-        netwList.add(netw);
+        netwList.add(0, netw);
         notifyDataSetChanged();
     }
 
