@@ -14,8 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import aitmobile.wifree.adapter.NetwAdapter;
-import aitmobile.wifree.data.Netw;
+import aitmobile.wifree.adapter.NetworkAdapter;
+import aitmobile.wifree.data.Network;
 import aitmobile.wifree.fragments.MessageFragment;
 
 
@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private WifiManager wifiMan;
     private Button btnAdd;
     private LinearLayout linLayout;
-    private NetwAdapter netwAdapter;
-    private RecyclerView recyclerNetw;
+    private NetworkAdapter netwAdapter;
+    private RecyclerView recyclerNetwork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         linLayout = (LinearLayout) findViewById(R.id.activity_main);
-        recyclerNetw = (RecyclerView) findViewById(R.id.recyclerViewNewt);
+        recyclerNetwork = (RecyclerView) findViewById(R.id.recyclerViewNewt);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerNetw.setLayoutManager(mLayoutManager);
-        recyclerNetw.setHasFixedSize(true);
+        recyclerNetwork.setLayoutManager(mLayoutManager);
+        recyclerNetwork.setHasFixedSize(true);
 
-        netwAdapter = new NetwAdapter(this);
+        netwAdapter = new NetworkAdapter(this);
 
-        recyclerNetw.setAdapter(netwAdapter);
+        recyclerNetwork.setAdapter(netwAdapter);
 
 
         this.wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void downloadNetw(String SSID, String key){
+    public void downloadNetwork(String SSID, String key){
         WifiConfiguration wifiConfig = new WifiConfiguration();
 
         wifiConfig.SSID = String.format("\"%S\"", SSID);
@@ -87,19 +87,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void addCurrNetwork(String passwd){
         String SSID;
-        Netw ourNet;
+        Network ourNet;
 
 
         this.wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         WifiInfo wifiInfo = this.wifiMan.getConnectionInfo();
         SSID = wifiInfo.getSSID();
-        ourNet = new Netw(SSID,passwd);
+        ourNet = new Network(SSID,passwd);
 
 
         showToastMessage(ourNet.toString());
 
-        netwAdapter.addNetw(new Netw(SSID, passwd));
+        netwAdapter.addNetwork(new Network(SSID, passwd));
 
 
     }

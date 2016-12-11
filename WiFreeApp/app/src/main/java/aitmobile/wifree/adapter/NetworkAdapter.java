@@ -17,20 +17,20 @@ import java.util.List;
 
 import aitmobile.wifree.MainActivity;
 import aitmobile.wifree.R;
-import aitmobile.wifree.data.Netw;
+import aitmobile.wifree.data.Network;
 
 /**
  * Created by C_lo on 12/9/2016.
  */
 
-public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
+public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHolder> {
 
-    private List<Netw> netwList;
+    private List<Network> netwList;
     private Context context;
     private int lastPosition = -1;
 
-    public NetwAdapter(Context context) {
-        netwList = Netw.listAll(Netw.class);
+    public NetworkAdapter(Context context) {
+        netwList = Network.listAll(Network.class);
         this.context = context;
     }
 
@@ -39,12 +39,14 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
         public TextView tvName;
 
         public ImageButton btnDelete;
+        public ImageButton btnDownload;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
             btnDelete = (ImageButton) itemView.findViewById(R.id.btnDelete);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
+            btnDownload = (ImageButton) itemView.findViewById(R.id.btnDownload);
 
         }
     }
@@ -62,7 +64,14 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeNetw(position);
+                removeNetwork(position);
+            }
+        });
+
+        viewHolder.btnDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).downloadNetwork(netwList.get(position).getSSID(),netwList.get(position).getKey());
             }
         });
     }
@@ -72,14 +81,14 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
         return netwList.size();
     }
 
-    public void addNetw(Netw netw) {
+    public void addNetwork(Network netw) {
         netw.save();
         netwList.add(0, netw);
         notifyDataSetChanged();
     }
 
 
-    public void removeNetw(int index) {
+    public void removeNetwork(int index) {
         // remove it from the DB
         netwList.get(index).delete();
         // remove it from the list
@@ -87,7 +96,7 @@ public class NetwAdapter extends RecyclerView.Adapter<NetwAdapter.ViewHolder> {
         notifyItemRemoved(index);
     }
 
-    public Netw getNetw(int i) {
+    public Network getNetwork(int i) {
         return netwList.get(i);
     }
 

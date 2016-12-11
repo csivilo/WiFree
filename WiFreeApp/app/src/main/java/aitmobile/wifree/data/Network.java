@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Created by C_lo on 12/9/2016.
  */
 
-public class Netw extends SugarRecord implements Serializable{
+public class Network extends SugarRecord implements Serializable{
     private String SSID;
     private String key;
 
-    public Netw(String name, String pass){
+    public Network(String name, String pass){
         this.SSID = name;
         this.key = pass;
     }
