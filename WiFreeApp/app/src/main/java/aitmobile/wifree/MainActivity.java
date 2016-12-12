@@ -136,12 +136,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //addNetworkToMap(mMap,"UPC0777948","VOQAKOZE");
+        LatLng szilard = new LatLng(47.490915, 19.070002);
+        LatLng sierra = new LatLng(34.170871, -118.031933);
+        addNetworkToMap(mMap,"UPC0777948","VOQAKOZE",szilard);
+        addNetworkToMap(mMap, "Sivilotti", "carloandali",sierra);
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void addNetworkToMap(GoogleMap gmap, String SSID, String key) {
+        
+    }
+
+
+    public void addNetworkToMap(GoogleMap gmap, String SSID, String key, LatLng loc) {
+
         Marker newmark;
 //        double lati = 47.562478;
 //        double longi = 19.055066;
@@ -197,8 +205,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         WifiConfiguration wifiConfig = new WifiConfiguration();
 
 
-        wifiConfig.SSID = String.format("\"%S\"", SSID);
-        wifiConfig.preSharedKey = String.format("\"%S\"", key);
+        wifiConfig.SSID = "\""+SSID+"\"";
+        wifiConfig.priority = 42;
+        wifiConfig.status = WifiConfiguration.Status.DISABLED;
+
+        wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        wifiConfig.preSharedKey = "\""+key+"\"";
+
+
 
         int netwId = this.wifiMan.addNetwork(wifiConfig);
         this.wifiMan.disconnect();
@@ -231,7 +251,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void showToastMessage(String message) {
+    public void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
