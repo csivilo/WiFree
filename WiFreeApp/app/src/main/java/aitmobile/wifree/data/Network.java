@@ -17,6 +17,8 @@ public class Network extends SugarRecord implements Serializable{
         this.key = pass;
     }
 
+    public Network(){}
+
 
     public String getKey() {
         return key;

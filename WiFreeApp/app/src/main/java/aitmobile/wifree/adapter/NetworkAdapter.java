@@ -71,6 +71,7 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
         viewHolder.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((MainActivity) context).showToastMessage("WELP");
                 ((MainActivity) context).downloadNetwork(netwList.get(position).getSSID(),netwList.get(position).getKey());
             }
         });

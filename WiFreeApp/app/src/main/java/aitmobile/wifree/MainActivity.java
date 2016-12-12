@@ -139,8 +139,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         WifiConfiguration wifiConfig = new WifiConfiguration();
 
 
-        wifiConfig.SSID = String.format("\"%S\"", SSID);
-        wifiConfig.preSharedKey = String.format("\"%S\"", key);
+        wifiConfig.SSID = "\""+SSID+"\"";
+        wifiConfig.priority = 42;
+        wifiConfig.status = WifiConfiguration.Status.DISABLED;
+
+        wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+        wifiConfig.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        //wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        //wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+        wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        wifiConfig.preSharedKey = "\""+key+"\"";
+
+
 
         int netwId = this.wifiMan.addNetwork(wifiConfig);
         this.wifiMan.disconnect();
@@ -173,7 +187,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void showToastMessage(String message) {
+    public void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
