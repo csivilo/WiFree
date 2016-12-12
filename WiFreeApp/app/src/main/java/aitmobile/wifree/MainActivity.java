@@ -109,12 +109,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //addNetworkToMap(mMap,"UPC0777948","VOQAKOZE");
+        LatLng szilard = new LatLng(47.490915, 19.070002);
+        LatLng sierra = new LatLng(34.170871, -118.031933);
+        addNetworkToMap(mMap,"UPC0777948","VOQAKOZE",szilard);
+        addNetworkToMap(mMap, "Sivilotti", "carloandali",sierra);
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void addNetworkToMap(GoogleMap gmap, String SSID, String key) {
+        
+    }
+
+
+    public void addNetworkToMap(GoogleMap gmap, String SSID, String key, LatLng loc) {
+
         Marker newmark;
 //        double lati = 47.562478;
 //        double longi = 19.055066;
@@ -179,8 +187,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
         wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         wifiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        //wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-        //wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
         wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
         wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
         wifiConfig.preSharedKey = "\""+key+"\"";
