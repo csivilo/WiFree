@@ -1,10 +1,14 @@
 package aitmobile.wifree;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +18,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import aitmobile.wifree.adapter.NetworkAdapter;
 import aitmobile.wifree.data.Network;
 import aitmobile.wifree.fragments.MessageFragment;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
     public static final String KEY_MSG = "KEY_MSG";
@@ -30,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linLayout;
     private NetworkAdapter netwAdapter;
     private RecyclerView recyclerNetwork;
+    private LocationManager locoMan;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +71,53 @@ public class MainActivity extends AppCompatActivity {
                 addNetworkFragment();
             }
         });
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+
+
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        //LatLng sydney = new LatLng(-34, 151);
+        //addNetworkToMap(mMap,"UPC0777948","VOQAKOZE");
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    public void addNetworkToMap(GoogleMap gmap, String SSID, String key) {
+        Marker newmark;
+        double lat = 47.562478;
+        double longi = 19.055066;
+
+
+
+        try {
+            //Location location = locoMan.getLastKnownLocation(locoMan.GPS_PROVIDER);
+            LatLng currLoc =  new LatLng(lat,longi);
+
+
+            newmark = gmap.addMarker(new MarkerOptions()
+                    .position(currLoc)
+                    .title(SSID)
+                    .snippet(key)
+                    .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("wifi", 75, 75))));
+            gmap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    downloadNetwork(marker.getTitle(), marker.getSnippet());
+                    return true;
+                }
+            });
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currLoc));
+        } catch (SecurityException ex) {
+
+        }
     }
 
 
@@ -73,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void downloadNetwork(String SSID, String key){
+        showToastMessage(SSID+"   "+key);
         WifiConfiguration wifiConfig = new WifiConfiguration();
+
 
         wifiConfig.SSID = String.format("\"%S\"", SSID);
         wifiConfig.preSharedKey = String.format("\"%S\"", key);
@@ -94,12 +158,17 @@ public class MainActivity extends AppCompatActivity {
 
         WifiInfo wifiInfo = this.wifiMan.getConnectionInfo();
         SSID = wifiInfo.getSSID();
+        CharSequence blank = "";
+        CharSequence topq = "\"";
+
+        SSID = SSID.replace(topq,blank);
         ourNet = new Network(SSID,passwd);
 
 
         showToastMessage(ourNet.toString());
 
         netwAdapter.addNetwork(new Network(SSID, passwd));
+        addNetworkToMap(mMap,SSID,passwd);
 
 
     }
@@ -113,4 +182,10 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(linLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
+    }
 }
