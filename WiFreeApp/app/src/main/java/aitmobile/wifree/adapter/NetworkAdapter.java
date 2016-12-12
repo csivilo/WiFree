@@ -32,6 +32,8 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
     public NetworkAdapter(Context context) {
         netwList = Network.listAll(Network.class);
         this.context = context;
+        addNetwork(new Network("Sivilotti", "carloandali"));
+        addNetwork(new Network("UPC0777948","VOQAKOZE"));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,7 +73,6 @@ public class NetworkAdapter extends RecyclerView.Adapter<NetworkAdapter.ViewHold
         viewHolder.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) context).showToastMessage("WELP");
                 ((MainActivity) context).downloadNetwork(netwList.get(position).getSSID(),netwList.get(position).getKey());
             }
         });

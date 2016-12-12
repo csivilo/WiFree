@@ -8,4 +8,13 @@
     <string name="netw_added_suc">New network added</string>
     <string name="no_net_addd">Network not added</string>
     <string name="addnet">Add Network</string>
+    <string name="connect_suspend">Connection suspended...</string>
+    <string name="but_i_need_it">I need it for gps</string>
+    <string name="fail">Connection failed</string>
+    <string name="sampSSID1">UPC0777948</string>
+    <string name="sampKey1">VOQAKOZE</string>
+    <string name="sampSSID2">Sivilotti</string>
+    <string name="sampKey2">carloandali</string>
+    <string name="loc_null">Location was null</string>
+    <string name="wifreeeee">WiFree</string>
 </resources>

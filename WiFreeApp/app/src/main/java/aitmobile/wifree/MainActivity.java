@@ -1,7 +1,9 @@
 package aitmobile.wifree;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -11,7 +13,10 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +31,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -46,8 +52,8 @@ import aitmobile.wifree.data.Network;
 import aitmobile.wifree.fragments.MessageFragment;
 
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
-
+public class MainActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback{
 
     public static final String KEY_MSG = "KEY_MSG";
 
@@ -57,11 +63,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LinearLayout linLayout;
     private NetworkAdapter netwAdapter;
     private RecyclerView recyclerNetwork;
-    private LocationManager locoMan;
+    private LocationManager locoMan = null;
     private GoogleMap mMap;
     private GoogleApiClient myGoogleApiClient;
     double lon;
     double lat;
+    private Location myLoc;
     private LocationRequest myLocationRequest;
 
     @Override
@@ -69,8 +76,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(myGoogleApiClient == null) {
+            myGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            myGoogleApiClient.connect();
+        }
+
+
+        requestNeededPermission();
+
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(myLocationRequest);
+
         final PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(myGoogleApiClient, builder.build());
 
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
@@ -86,9 +106,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-        myGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .build();
 
 
         linLayout = (LinearLayout) findViewById(R.id.activity_main);
@@ -102,7 +119,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         recyclerNetwork.setAdapter(netwAdapter);
 
 
-        this.wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +135,40 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        Toast.makeText(this, R.string.connect_suspend, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        try {
+            myLoc = LocationServices.FusedLocationApi.getLastLocation(
+                    myGoogleApiClient);
+        } catch(SecurityException ex){
+
+        }
+    }
+
+    public void requestNeededPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(MainActivity.this,
+                        R.string.but_i_need_it, Toast.LENGTH_SHORT).show();
+            }
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    101);
+        } else {}
+    }
+
+
     @Override
     protected void onStart() {
         myGoogleApiClient.connect();
@@ -130,45 +181,48 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onStop();
     }
 
+    @Override
+    public void onConnectionFailed(ConnectionResult arg0) {
+        showToastMessage(getString(R.string.fail));
+    }
 
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng szilard = new LatLng(47.490915, 19.070002);
         LatLng sierra = new LatLng(34.170871, -118.031933);
-        addNetworkToMap(mMap,"UPC0777948","VOQAKOZE",szilard);
-        addNetworkToMap(mMap, "Sivilotti", "carloandali",sierra);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        addNetworkToMap(mMap,getString(R.string.sampSSID1),getString(R.string.sampKey1),szilard);
+        addNetworkToMap(mMap, getString(R.string.sampSSID2), getString(R.string.sampKey2),sierra);
+
     }
 
     public void addNetworkToMap(GoogleMap gmap, String SSID, String key) {
-        
+        try {
+            if (myLoc != null) {
+                lat = myLoc.getLatitude();
+                lon = myLoc.getLongitude();
+            }else{
+                showToastMessage(getString(R.string.loc_null));
+            }
+
+            LatLng currLoc = new LatLng(lat, lon);
+            addNetworkToMap(gmap,SSID,key,currLoc);
+        }
+        catch(SecurityException ex){
+
+            }
     }
 
 
     public void addNetworkToMap(GoogleMap gmap, String SSID, String key, LatLng loc) {
 
         Marker newmark;
-//        double lati = 47.562478;
-//        double longi = 19.055066;
-
-
-
+//
         try {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(myGoogleApiClient);
-
-            if(location != null) {
-                lat = location.getLatitude();
-                lon = location.getLongitude();
-            }
-
-            LatLng currLoc =  new LatLng(lat, lon);
-
 
             newmark = gmap.addMarker(new MarkerOptions()
-                    .position(currLoc)
+                    .position(loc)
                     .title(SSID)
                     .snippet(key)
                     .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("wifi", 75, 75))));
@@ -180,7 +234,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(currLoc));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
         } catch (SecurityException ex) {
 
         }
@@ -201,7 +255,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void downloadNetwork(String SSID, String key){
-        showToastMessage(SSID+"   "+key);
+        showToastMessage(SSID+" ; "+key);
         WifiConfiguration wifiConfig = new WifiConfiguration();
 
 
@@ -243,7 +297,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         ourNet = new Network(SSID,passwd);
 
 
-        showToastMessage(ourNet.toString());
+        showToastMessage("Added: \n"+ourNet.toString());
 
         netwAdapter.addNetwork(new Network(SSID, passwd));
         addNetworkToMap(mMap,SSID,passwd);

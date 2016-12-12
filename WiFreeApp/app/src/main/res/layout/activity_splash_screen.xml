@@ -11,7 +11,16 @@
         android:id="@+id/splashImage"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@android:drawable/ic_media_ff"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:src="@android:drawable/ic_menu_myplaces"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="55sp"
+        android:textColor="#ffff"
+        android:text="@string/wifreeeee"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
